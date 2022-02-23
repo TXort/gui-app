@@ -2,65 +2,53 @@
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
 #endif
-class MyApp : public wxApp
-{
+
+
+
+
+class MyApp : public wxApp {
 public:
     virtual bool OnInit();
 };
-class MyFrame : public wxFrame
-{
+
+class MyFrame : public wxFrame {
 public:
     MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
+};
 
-private:
-    void OnHello(wxCommandEvent &event);
-    void OnExit(wxCommandEvent &event);
-    void OnAbout(wxCommandEvent &event);
-wxDECLARE_EVENT_TABLE();
-};
-enum
-{
-    ID_Hello = 1
-};
-wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-                EVT_MENU(ID_Hello, MyFrame::OnHello)
-                EVT_MENU(wxID_EXIT, MyFrame::OnExit)
-                EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
-wxEND_EVENT_TABLE()
+
 wxIMPLEMENT_APP(MyApp);
-bool MyApp::OnInit()
-{
-    MyFrame *frame = new MyFrame("Hello World", wxPoint(50, 50), wxSize(450, 340));
+
+bool MyApp::OnInit() {
+    auto *frame = new MyFrame("Hello World", wxDefaultPosition, wxDefaultSize);
     frame->Show(true);
     return true;
 }
-MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
-        : wxFrame(NULL, wxID_ANY, title, pos, size)
-{
-    wxMenu *menuFile = new wxMenu;
-    menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
-                     "Help string shown in status bar for this menu item");
-    menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT);
-    wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(wxID_ABOUT);
-    wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuHelp, "&Help");
-    SetMenuBar(menuBar);
-    CreateStatusBar();
-    SetStatusText("Welcome to wxWidgets!");
+
+MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size) : wxFrame(nullptr, wxID_ANY, title, pos, size) {
+    auto *panel_top = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(200, 100));
+    panel_top->SetBackgroundColour(wxColor(100, 100, 200));
+
+    auto *panel_bottom = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(200, 100));
+    panel_bottom->SetBackgroundColour(wxColor(100, 200, 100));
+
+    auto *panel_bottom_right = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(200, 100));
+    panel_bottom_right->SetBackgroundColour(wxColor(200, 200, 100));
+
+    auto *sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(panel_top, 1, wxEXPAND | wxLEFT | wxTOP | wxRIGHT, 10);
+
+    auto *sizer_bottom = new wxBoxSizer(wxHORIZONTAL);
+    sizer_bottom->Add(panel_bottom, 1, wxEXPAND | wxRIGHT, 10);
+    sizer_bottom->Add(panel_bottom_right, 1, wxEXPAND, 0);
+
+    sizer->Add(sizer_bottom, 2, wxEXPAND | wxALL, 10);
+
+    this->SetSizerAndFit(sizer);
 }
-void MyFrame::OnExit(wxCommandEvent &event)
-{
-    Close(true);
-}
-void MyFrame::OnAbout(wxCommandEvent &event)
-{
-    wxMessageBox("This is a wxWidgets' Hello world sample",
-                 "About Hello World", wxOK | wxICON_INFORMATION);
-}
-void MyFrame::OnHello(wxCommandEvent &event)
-{
-    wxLogMessage("Hello world from wxWidgets!");
-}
+
+
+
+
+
+
